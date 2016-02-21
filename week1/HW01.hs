@@ -18,13 +18,16 @@ dropLastDigit i = i `div` 10
 -- Exercise 2 -----------------------------------------
 
 toRevDigits :: Integer -> [Integer]
-toRevDigits = undefined
+toRevDigits i
+  | i <= 0 = []
+  | otherwise = lastDigit i : toRevDigits (dropLastDigit oi)
+--   | lastDigit i : toRevDigits (dropLastDigit i)
 
 -- Exercise 3 -----------------------------------------
 
 -- Double every second number in a list starting on the left.
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther = undefined
+doubleEveryOther = undef
 
 -- Exercise 4 -----------------------------------------
 
@@ -35,7 +38,7 @@ sumDigits = undefined
 
 -- Exercise 5 -----------------------------------------
 
--- Validate a credit card number using the above functions.
+ -- Validate a credit card number using the above functions.
 luhn :: Integer -> Bool
 luhn = undefined
 
