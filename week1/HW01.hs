@@ -20,27 +20,31 @@ dropLastDigit i = i `div` 10
 toRevDigits :: Integer -> [Integer]
 toRevDigits i
   | i <= 0 = []
-  | otherwise = lastDigit i : toRevDigits (dropLastDigit oi)
---   | lastDigit i : toRevDigits (dropLastDigit i)
+  | otherwise = lastDigit i : toRevDigits (dropLastDigit i)
 
 -- Exercise 3 -----------------------------------------
 
 -- Double every second number in a list starting on the left.
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther = undef
+doubleEveryOther [] = []
+doubleEveryOther [x] = [x]
+doubleEveryOther (x:y:xs) = [x, 2 * y] ++ doubleEveryOther xs 
 
 -- Exercise 4 -----------------------------------------
 
 -- Calculate the sum of all the digits in every Integer.
 sumDigits :: [Integer] -> Integer
-sumDigits = undefined
+sumDigits [] = 0
+sumDigits (x:xs)
+  | digitLength x == 1 = x + sumDigits xs
+  | otherwise = (lastDigit x) + (dropLastDigit x) + sumDigits xs
 
 
 -- Exercise 5 -----------------------------------------
 
  -- Validate a credit card number using the above functions.
 luhn :: Integer -> Bool
-luhn = undefined
+luhn = (== 0) . (`mod` 10) . sumDigits  .  doubleEveryOther . toRevDigits 
 
 -- Exercise 6 -----------------------------------------
 
