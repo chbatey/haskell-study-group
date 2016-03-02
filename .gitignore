@@ -1,1 +1,6 @@
 TAGS
+.idea
+*.swp
+*~
+*.swo
+*.iml

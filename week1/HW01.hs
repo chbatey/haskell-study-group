@@ -13,7 +13,7 @@ lastDigit i = i `mod` 10
 
 -- Drop the last digit from a number
 dropLastDigit :: Integer -> Integer
-dropLastDigit i = i `div` 10
+dropLastDigit = (`div` 10)
 
 -- Exercise 2 -----------------------------------------
 
@@ -26,9 +26,8 @@ toRevDigits i
 
 -- Double every second number in a list starting on the left.
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther [] = []
-doubleEveryOther [x] = [x]
-doubleEveryOther (x:y:xs) = [x, 2 * y] ++ doubleEveryOther xs 
+doubleEveryOther (x:y:xs) = x : 2 * y : doubleEveryOther xs
+doubleEveryOther x = x
 
 -- Exercise 4 -----------------------------------------
 
@@ -44,7 +43,7 @@ sumDigits (x:xs)
 
  -- Validate a credit card number using the above functions.
 luhn :: Integer -> Bool
-luhn = (== 0) . (`mod` 10) . sumDigits  .  doubleEveryOther . toRevDigits 
+luhn = (== 0) . (`mod` 10) . sumDigits  .  doubleEveryOther . toRevDigits
 
 -- Exercise 6 -----------------------------------------
 
