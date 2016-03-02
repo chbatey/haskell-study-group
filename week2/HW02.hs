@@ -42,7 +42,7 @@ matches guess actual = sum $ map (uncurry min) counts
 getMove :: Code -> Code -> Move
 getMove actual guess = Move guess exact nonExact
   where exact = exactMatches actual guess
-        nonExact = (matches actual guess) - exact
+        nonExact = matches actual guess - exact
         
 
 -- Exercise 4 -----------------------------------------
@@ -50,27 +50,37 @@ getMove actual guess = Move guess exact nonExact
 isConsistent :: Move -> Code -> Bool
 isConsistent (Move guess exact nonExact) code  = exact == codeExact && nonExact == codeNonExact
   where codeExact = exactMatches guess code
-        codeNonExact = (matches guess code) - codeExact
+        codeNonExact = matches guess code - codeExact
 
 -- Exercise 5 -----------------------------------------
 
 filterCodes :: Move -> [Code] -> [Code]
-filterCodes move codes = filter (isConsistent move) codes
+filterCodes move = filter (isConsistent move)
 
 -- Exercise 6 -----------------------------------------
 
 allCodes :: Int -> [Code]
 allCodes 0 = []
-allCodes n = loop n 
-  where loop 1 = map (\x -> [x]) colors
-        loop i = concatMap (\x -> (map (:x) colors)) $ loop (i-1)
+allCodes n = loop n
+  where loop 1 = map (: []) colors
+        loop i = concatMap (\x -> map (:x) colors) $ loop (i-1)
 
-fdsf
 
 -- Exercise 7 -----------------------------------------
 
 solve :: Code -> [Move]
-solve = undefined
+solve code = solveN code (allCodes (length code))
+
+solveN :: Code -> [Code] -> [Move]
+solveN code (guess:remaining)
+    | isWinner (length code) next = [next]
+    | otherwise = next : solveN code (filterCodes next remaining)
+    where next = getMove code guess
+solveN _ _ = []
+
+
+isWinner :: Int -> Move -> Bool
+isWinner n (Move _ exact _) = n == exact
 
 -- Bonus ----------------------------------------------
 -- 
