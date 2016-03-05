@@ -79,8 +79,8 @@ desugar (Sequence s1 s2) = DSequence (desugar s1) (desugar s2)
 desugar (While e s) = DWhile e (desugar s)
 desugar (If e s1 s2) = DIf e (desugar s1) (desugar s2)
 desugar (Assign str e) = DAssign str e
-desugar (Incr str) = DAssign str (Op (Var str) Plus (Val 1))
-desugar (For s1 e s2 s3) = DSequence (desugar s1) (DWhile e (DSequence (desugar s2) (desugar s3)))
+desugar (Incr stm) = DAssign stm (Op (Var stm) Plus (Val 1))
+desugar (For s1 e s2 s3) = DSequence (desugar s1) (DWhile e (DSequence (desugar s3) (desugar s2)))
 
 
 -- Exercise 4 -----------------------------------------
@@ -111,11 +111,22 @@ slist [] = Skip
 slist l  = foldr1 Sequence l
 
 simples :: Statement
-simples = slist [ Assign "A" (Val 4), If (Val 1) (Incr "In") (Incr "In2")]
+simples = slist [ Assign "A" (Val 4), If (Var "In") (Incr "In") (Incr "In2")]
 
 whiles :: Statement
-whiles = undefined
--- whiles :: While (Op (Var "In") Lt (Val 5)) (Sequence (Incr "In") (Incr "c"))
+whiles = While (Op (Var "In") Lt (Val 5)) (Sequence (Incr "In") (Incr "X"))
+
+fors :: Statement
+fors = For (Assign "Out" (Val 1))
+           (Op (Var "In") Gt (Val 0))
+           (Assign "In" (Op (Var "In") Minus (Val 1)))
+           (Assign "Out" (Op (Var "In") Times (Var "Out")))
+
+simpleFors :: Statement
+simpleFors = For (Assign "i" (Val 1))
+                 (Op (Var "i") Lt (Val 3))
+                 (Incr "i")
+                 (Sequence (Assign "Out" (Op (Var "Out") Plus (Var "i"))) (Incr "Out2") )
 
 {- Calculate the factorial of the input
 
