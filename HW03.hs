@@ -63,7 +63,6 @@ toInt :: Bool -> Int
 toInt True = 1
 toInt False = 0
 
-
 -- Exercise 3 -----------------------------------------
 
 data DietStatement = DAssign String Expression
@@ -75,26 +74,26 @@ data DietStatement = DAssign String Expression
 
 desugar :: Statement -> DietStatement
 desugar Skip = DSkip
-desugar (Sequence s1 s2) = DSequence (desugar s1) (desugar s2)
-desugar (While e s) = DWhile e (desugar s)
-desugar (If e s1 s2) = DIf e (desugar s1) (desugar s2)
-desugar (Assign str e) = DAssign str e
-desugar (Incr stm) = DAssign stm (Op (Var stm) Plus (Val 1))
-desugar (For s1 e s2 s3) = DSequence (desugar s1) (DWhile e (DSequence (desugar s3) (desugar s2)))
+desugar (Sequence st1 st2) = DSequence (desugar st1) (desugar st2)
+desugar (While e st) = DWhile e (desugar st)
+desugar (If e st1 st2) = DIf e (desugar st1) (desugar st2)
+desugar (Assign str ex) = DAssign str ex
+desugar (Incr st) = DAssign st (Op (Var st) Plus (Val 1))
+desugar (For st1 e st2 st3) = DSequence (desugar st1) (DWhile e (DSequence (desugar st3) (desugar st2)))
 
 
 -- Exercise 4 -----------------------------------------
 
 evalSimple :: State -> DietStatement -> State
-evalSimple state (DAssign str e) = extend state str (evalE state e)
+evalSimple state (DAssign st ex) = extend state st (evalE state ex)
 
-evalSimple state (DIf e st1 st2) = evalSimple state toEval
-    where toEval = if evalE state e == 1 then st1 else st2
+evalSimple state (DIf ex st1 st2) = evalSimple state toEval
+    where toEval = if evalE state ex == 1 then st1 else st2
 
-evalSimple state w@(DWhile e st) = if shouldEval then
-                                    evalSimple (evalSimple state st) w
-                                  else state
-    where shouldEval = evalE state e == 1
+evalSimple state w@(DWhile ex st) = if shouldEval then
+                                      evalSimple (evalSimple state st) w
+                                    else state
+    where shouldEval = evalE state ex == 1
 
 evalSimple state (DSequence st1 st2) = evalSimple nextState st2
     where nextState = evalSimple state st1
