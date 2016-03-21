@@ -30,9 +30,6 @@ instance Show Value where
 
 type State = String -> Value
 
-instance Show State where
-    show _ = "Function"
-
 empty :: State
 empty = const (Boolean False)
 

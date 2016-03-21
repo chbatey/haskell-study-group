@@ -23,7 +23,7 @@ colors = [Red, Green, Blue, Yellow, Orange, Purple]
 
 -- Get the number of exact matches between the actual code and the guess
 exactMatches :: Code -> Code -> Int
-exactMatches guess actual = length $ filter (uncurry (==)) $ zip guess actual
+exactMatches guess = length . filter (uncurry (==)) . zip guess
 
 -- Exercise 2 -----------------------------------------
 
@@ -55,7 +55,7 @@ isConsistent (Move guess exact nonExact) code  = exact == codeExact && nonExact 
 -- Exercise 5 -----------------------------------------
 
 filterCodes :: Move -> [Code] -> [Code]
-filterCodes move = filter (isConsistent move)
+filterCodes = filter . isConsistent
 
 -- Exercise 6 -----------------------------------------
 
@@ -77,7 +77,6 @@ solveN code (guess:remaining)
     | otherwise = next : solveN code (filterCodes next remaining)
     where next = getMove code guess
 solveN _ _ = []
-
 
 isWinner :: Int -> Move -> Bool
 isWinner n (Move _ exact _) = n == exact
