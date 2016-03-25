@@ -79,7 +79,7 @@ desugar (While e st) = DWhile e (desugar st)
 desugar (If e st1 st2) = DIf e (desugar st1) (desugar st2)
 desugar (Assign str ex) = DAssign str ex
 desugar (Incr st) = DAssign st (Op (Var st) Plus (Val 1))
-desugar (For st1 e st2 st3) = DSequence (desugar st1) (DWhile e (DSequence (desugar st3) (desugar st2)))
+desugar (For st1 condition update st3) = DSequence (desugar st1) (DWhile condition (DSequence (desugar st3) (desugar update)))
 
 
 -- Exercise 4 -----------------------------------------

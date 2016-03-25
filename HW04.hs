@@ -1,12 +1,18 @@
 {-# OPTIONS_GHC -Wall #-}
 module HW04 where
 
+import Data.List(intercalate)
+
 newtype Poly a = P [a]
+
+data Blah a = Blah [a] deriving (Show)
+data Wah a = Wah Int deriving (Show)
+
 
 -- Exercise 1 -----------------------------------------
 
 x :: Num a => Poly a
-x = undefined
+x = P [1, 0]
 
 -- Exercise 2 ----------------------------------------
 
@@ -16,7 +22,12 @@ instance (Num a, Eq a) => Eq (Poly a) where
 -- Exercise 3 -----------------------------------------
 
 instance (Num a, Eq a, Show a) => Show (Poly a) where
-    show = undefined
+    show (P p) = reverse $ intercalate " + " $ zipWith string [0..] p
+
+
+string :: (Num a, Show a, Eq a) => Integer -> a -> String
+string 0 c = show c
+string e c = show c ++ "x^" ++ show e
 
 -- Exercise 4 -----------------------------------------
 
